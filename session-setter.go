@@ -8,7 +8,7 @@ import (
 type SessionsSetter struct {
 	*amqp.Connection
 	*amqp.Channel
-  serviceName string
+	serviceName string
 }
 
 // constructor for SessonsGetter
@@ -29,14 +29,14 @@ func NewSessionsSetter(serviceName string) *SessionsSetter {
 // declare method Set() to set session
 func (r *SessionsSetter) Set(sessionId, correlationId string) (err error) {
 	err = r.Channel.Publish(
-		"plutus-sessions",               // exchange
+		"plutus-sessions",       // exchange
 		r.serviceName+"."+"set", // routing key
 		false, // mandatory
 		false, // immediate
 		amqp.Publishing{
-			ContentType: "application/json",
-      CorrelationId: correlationId,
-			Body:        []byte(sessionId),
+			ContentType:   "application/json",
+			CorrelationId: correlationId,
+			Body:          []byte(sessionId),
 		})
 	return err
 }
@@ -45,12 +45,12 @@ func (r *SessionsSetter) Set(sessionId, correlationId string) (err error) {
 func (r *SessionsSetter) Init() {
 	err := r.Channel.ExchangeDeclare(
 		"plutus-sessions", // name
-		"topic",          // type
-		true,             // durable
-		false,            // auto-deleted
-		false,            // internal
-		false,            // no-wait
-		nil,              // arguments
+		"topic",           // type
+		true,              // durable
+		false,             // auto-deleted
+		false,             // internal
+		false,             // no-wait
+		nil,               // arguments
 	)
 	if err != nil {
 		log.Fatal(err)

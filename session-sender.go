@@ -8,7 +8,7 @@ import (
 type SessionsSender struct {
 	*amqp.Connection
 	*amqp.Channel
-  serviceName, correlationId string
+	serviceName, correlationId string
 }
 
 // constructor for SessonsSender
@@ -29,14 +29,14 @@ func NewSessionsSender(serviceName, correlationId string) *SessionsSender {
 // declare method Write() to realize Writer interface
 func (r *SessionsSender) Write(p []byte) (n int, err error) {
 	err = r.Channel.Publish(
-		r.serviceName,               // exchange
+		r.serviceName,     // exchange
 		"plutus-sessions", // routing key
-		false, // mandatory
-		false, // immediate
+		false,             // mandatory
+		false,             // immediate
 		amqp.Publishing{
-			ContentType: "application/json",
-      CorrelationId: r.correlationId,
-			Body:        p,
+			ContentType:   "application/json",
+			CorrelationId: r.correlationId,
+			Body:          p,
 		})
 	return len(p), err
 }
@@ -45,12 +45,12 @@ func (r *SessionsSender) Write(p []byte) (n int, err error) {
 func (r *SessionsSender) Init() {
 	err := r.Channel.ExchangeDeclare(
 		r.serviceName, // name
-		"topic",          // type
-		true,             // durable
-		false,            // auto-deleted
-		false,            // internal
-		false,            // no-wait
-		nil,              // arguments
+		"topic",       // type
+		true,          // durable
+		false,         // auto-deleted
+		false,         // internal
+		false,         // no-wait
+		nil,           // arguments
 	)
 	if err != nil {
 		log.Fatal(err)

@@ -6,18 +6,18 @@ import (
 
 	"plutus-sessions/logrus_rabbitmq"
 
+	"github.com/garyburd/redigo/redis"
 	"github.com/rcrowley/go-metrics"
 	"github.com/rubyist/circuitbreaker"
 	"github.com/sirupsen/logrus"
 	"github.com/streadway/amqp"
-	"github.com/garyburd/redigo/redis"
 )
 
 // Init redis and rabbit URLs for connection
 var (
 	rabbitMQURL = "amqp://guest:guest@localhost:5672"
-  redis_proto = "tcp"
-	redisURL   = ":6379"
+	redis_proto = "tcp"
+	redisURL    = ":6379"
 	log         *logrus.Logger
 )
 
@@ -85,12 +85,12 @@ func (r *RabbitMQ) Listen() error {
 
 	err = ch.ExchangeDeclare(
 		"plutus-sessions", // name
-		"topic",          // type
-		true,             // durable
-		false,            // auto-deleted
-		false,            // internal
-		false,            // no-wait
-		nil,              // arguments
+		"topic",           // type
+		true,              // durable
+		false,             // auto-deleted
+		false,             // internal
+		false,             // no-wait
+		nil,               // arguments
 	)
 
 	q, err := ch.QueueDeclare(
@@ -103,8 +103,8 @@ func (r *RabbitMQ) Listen() error {
 	)
 
 	err = ch.QueueBind(
-		q.Name,           // queue name
-		"*.*",              // routing key
+		q.Name,            // queue name
+		"*.*",             // routing key
 		"plutus-sessions", // exchange
 		false,
 		nil)
